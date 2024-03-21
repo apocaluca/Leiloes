@@ -1,3 +1,7 @@
+import javax.swing.JOptionPane;
+
+import com.mysql.jdbc.Connection;
+
 public class ClassPrincipal {
 
     public static void main(String[] args) {
@@ -13,10 +17,19 @@ public class ClassPrincipal {
             java.util.logging.Logger.getLogger(cadastroVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
-        // tela principal
-        java.awt.EventQueue.invokeLater(() -> {
-            new cadastroVIEW().setVisible(true);
-        });
+        // Fazer a conexão com o banco de dados
+        Connection conn = (Connection) conectaDAO.connectDB();
+        
+        // Verificar se a conexão foi bem-sucedida antes de abrir a tela principal
+        if (conn != null) {
+            // Tela principal
+            java.awt.EventQueue.invokeLater(() -> {
+                new cadastroVIEW().setVisible(true);
+            });
+        } else {
+            // Exibir mensagem de erro e encerrar o programa se a conexão falhar
+            JOptionPane.showMessageDialog(null, "Não foi possível conectar ao banco de dados.");
+            System.exit(1);
+        }
     }
 }
-
