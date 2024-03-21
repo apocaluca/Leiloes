@@ -13,7 +13,7 @@ public class ClassPrincipal {
             java.util.logging.Logger.getLogger(cadastroVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
-        // Criar e exibir a tela principal
+        // tela principal
         java.awt.EventQueue.invokeLater(() -> {
             new cadastroVIEW().setVisible(true);
         });
