@@ -1,3 +1,5 @@
+import java.sql.SQLException;
+
 import javax.swing.JOptionPane;
 
 public class cadastroVIEW extends javax.swing.JFrame {
@@ -52,7 +54,12 @@ public class cadastroVIEW extends javax.swing.JFrame {
         btnCadastrar.setText("Cadastrar");
         btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCadastrarActionPerformed(evt);
+                try {
+                    btnCadastrarActionPerformed(evt);
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -132,20 +139,36 @@ public class cadastroVIEW extends javax.swing.JFrame {
         
     }//GEN-LAST:event_cadastroNomeActionPerformed
 
-   private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-    // Crie um objeto ProdutosDTO com os dados digitados pelo usuário
-    ProdutosDTO produto = new ProdutosDTO();
-    produto.setNome(cadastroNome.getText());
-    produto.setValor(Integer.parseInt(cadastroValor.getText()));
-    produto.setStatus("A Venda");
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_btnCadastrarActionPerformed
+        // Verifica se o campo de valor está vazio
+        if (cadastroValor.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, insira um valor para o produto.");
+            return;
+        }
     
-    // Crie uma instância de ProdutosDAO e chame o método cadastrarProduto para salvar o produto no banco de dados
-    ProdutosDAO produtodao = new ProdutosDAO();
-    produtodao.cadastrarProduto(produto);
+        // Tenta converter o valor inserido para um número inteiro
+        int valor;
+        try {
+            valor = (int) Math.round(Double.parseDouble(cadastroValor.getText()));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor inválido. Por favor, insira um valor numérico válido.");
+            return;
+        }
     
-    // Exiba uma mensagem de sucesso para o usuário (opcional)
-    JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
-}//GEN-LAST:event_btnCadastrarActionPerformed
+        // Crie um objeto ProdutosDTO com os dados digitados pelo usuário
+        ProdutosDTO produto = new ProdutosDTO();
+        produto.setNome(cadastroNome.getText());
+        produto.setValor(valor); // Define o valor convertido
+        produto.setStatus("A Venda");
+        
+        // Crie uma instância de ProdutosDAO e chame o método cadastrarProduto para salvar o produto no banco de dados
+        ProdutosDAO produtodao = new ProdutosDAO();
+        produtodao.cadastrarProduto(produto);
+        
+        // Exiba uma mensagem de sucesso para o usuário (opcional)
+        JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
+    }
+    
 
     private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
         listagemVIEW listagem = new listagemVIEW(); 

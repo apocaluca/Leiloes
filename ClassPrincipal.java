@@ -1,6 +1,5 @@
 import javax.swing.JOptionPane;
-
-import com.mysql.jdbc.Connection;
+import java.sql.Connection;
 
 public class ClassPrincipal {
 
@@ -18,7 +17,7 @@ public class ClassPrincipal {
         }
 
         // Fazer a conexão com o banco de dados
-        Connection conn = (Connection) conectaDAO.connectDB();
+        Connection conn = conectaDAO.connectDB();
         
         // Verificar se a conexão foi bem-sucedida antes de abrir a tela principal
         if (conn != null) {
