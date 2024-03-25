@@ -1,21 +1,13 @@
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-
-/**
- *
- * @author Adm
- */
 public class listagemVIEW extends javax.swing.JFrame {
 
-    /**
-     * Creates new form listagemVIEW
-     */
+    
     public listagemVIEW() {
         initComponents();
         listarProdutos(); // Chame o método para listar os produtos ao abrir a janela
@@ -135,23 +127,42 @@ public class listagemVIEW extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
-        String id = id_produto_venda.getText();
-        
+    private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {
+    String id = id_produto_venda.getText();
+    int produtoId = Integer.parseInt(id);
+    
+    try {
         ProdutosDAO produtosdao = new ProdutosDAO();
+        produtosdao.venderProduto(produtoId);
         
-        //produtosdao.venderProduto(Integer.parseInt(id));
-        listarProdutos();
-    }//GEN-LAST:event_btnVenderActionPerformed
+        listarProdutos(); // Atualiza a lista de produtos na interface gráfica
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Erro ao vender o produto.");
+    }
 
-    private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
-        //vendasVIEW vendas = new vendasVIEW(); 
-        //vendas.setVisible(true);
-    }//GEN-LAST:event_btnVendasActionPerformed
+
+}
+
+
+private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {
+    try {
+        ProdutosDAO produtosdao = new ProdutosDAO();
+        ArrayList<ProdutosDTO> produtosVendidos = produtosdao.listarProdutosVendidos();
+        
+        new ConsultaVendasView(produtosVendidos);
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Erro ao consultar vendas.");
+    }
+}
+
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
+
+    
 
     /**
      * @param args the command line arguments
